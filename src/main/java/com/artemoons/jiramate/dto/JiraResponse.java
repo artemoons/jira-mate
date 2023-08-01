@@ -11,19 +11,10 @@ import lombok.Setter;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Getter
 @Setter
-public class JiraIssueInfo {
-
-//    @JsonProperty("total")
-//    private String total;
-//
-//    @JsonProperty("maxResults")
-//    private String maxResults;
-//
-//    @JsonProperty("timeSpent")
-//    private String timeSpent;
+public class JiraResponse {
 
     @JsonProperty("timeSpentSeconds")
-    private int timeSpentSeconds;
+    private Double timeSpentSeconds;
 
     @JsonProperty("started")
     private String worklogDate;

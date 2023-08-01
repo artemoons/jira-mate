@@ -3,7 +3,6 @@ package com.artemoons.jiramate.util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
@@ -33,21 +32,16 @@ public final class SSLUtil {
             }
     };
 
-    @PostConstruct
     public static void turnOffSslChecking() throws NoSuchAlgorithmException, KeyManagementException {
-        // Install the all-trusting trust manager
         final SSLContext sc = SSLContext.getInstance("SSL");
         sc.init(null, UNQUESTIONING_TRUST_MANAGER, null);
         HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        log.info("SSL DISABLED");
+        log.info("SSL verification: DISABLED");
     }
 
     public static void turnOnSslChecking() throws KeyManagementException, NoSuchAlgorithmException {
-        // Return it to the initial state (discovered by reflection, now hardcoded)
         SSLContext.getInstance("SSL").init(null, null, null);
+        log.info("SSL verification: ENABLED");
     }
 
-//    private SSLUtil(){
-//        throw new UnsupportedOperationException( "Do not instantiate libraries.");
-//    }
 }

@@ -1,4 +1,14 @@
 integration:
+  telegram:
+    bot-name: Jira-Mate_bot
+    bot-token:
+    chat-id:
   jira:
+    user-login:
+    user-password:
     api-url: https://jira.ru/rest/tempo-timesheets/4/worklogs/search
     user-list: "admin"
+application:
+  cron-time:
+    daily: 00 00 20 * * MON-FRI
+    weekly: 05 00 20 * * FRI
