@@ -1,0 +1,4 @@
+integration:
+  jira:
+    api-url: https://jira.ru/rest/tempo-timesheets/4/worklogs/search
+    user-list: "admin"
