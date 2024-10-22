@@ -1,10 +1,13 @@
-package com.artemoons.jiramate.service;
+package com.artemoons.jiramate.component;
 
+import com.artemoons.jiramate.service.ActionWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
+ * Вспомогательный класс для инициализации бота.
+ *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 @Slf4j
@@ -20,10 +23,17 @@ public class BotInitializer extends TelegramLongPollingBot {
      */
     private final String telegramBotName;
 
-    public BotInitializer(final String token, final String name, final ActionWrapper actionWrapper) {
+    /**
+     * Конструктор.
+     *
+     * @param token   токен
+     * @param name    имя бота
+     * @param wrapper обёртка над исполнителем действий
+     */
+    public BotInitializer(final String token, final String name, final ActionWrapper wrapper) {
         super(token);
         this.telegramBotName = name;
-        this.actionWrapper = actionWrapper;
+        this.actionWrapper = wrapper;
     }
 
     /**

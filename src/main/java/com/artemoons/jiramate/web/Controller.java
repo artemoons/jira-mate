@@ -7,27 +7,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
+ * Контроллер для работы с ботом.
+ *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 @RestController
 @RequestMapping(value = "/rest/api/v1")
 public class Controller {
 
-    JiraQueryService service;
+    /**
+     * Сервис работы с Jira.
+     */
+    private final JiraQueryService queryService;
 
+    /**
+     * Конструктор.
+     *
+     * @param service сервис работы с Jira
+     */
     @Autowired
-    public Controller(JiraQueryService service) {
-        this.service = service;
+    public Controller(final JiraQueryService service) {
+        this.queryService = service;
     }
 
-
+    /**
+     * Отладочный контроллер.
+     */
     @GetMapping("/query")
     private void getJiraResults() {
-
-
-        service.getDailyReport();
-
+        queryService.getDailyReport();
     }
-
 
 }
