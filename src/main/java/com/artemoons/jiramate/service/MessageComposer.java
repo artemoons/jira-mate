@@ -1,6 +1,7 @@
 package com.artemoons.jiramate.service;
 
 import com.artemoons.jiramate.dto.JiraResponse;
+import com.artemoons.jiramate.dto.TodayDate;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 
 /**
@@ -15,26 +16,29 @@ public interface MessageComposer {
      *
      * @param worklogHours     информация о затраченных часах
      * @param worktimeResponse информация о доступных часах
+     * @param today            информация о текущем дне
      * @return сформированное сообщения
      */
-    String prepareDailyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse);
+    String prepareDailyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
     /**
      * Метод для подготовки сообщения о записях о работе за неделю.
      *
      * @param worklogHours     информация о затраченных часах
      * @param worktimeResponse информация о доступных часах
+     * @param today            информация о текущем дне
      * @return сформированное сообщения
      */
-    String prepareWeeklyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse);
+    String prepareWeeklyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
     /**
      * Метод для подготовки сообщения о записях о работе за месяц.
      *
      * @param worklogHours     информация о затраченных часах
      * @param worktimeResponse информация о доступных часах
+     * @param today            информация о текущем дне
      * @return сформированное сообщения
      */
-    String prepareMonthlyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse);
+    String prepareMonthlyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
 }

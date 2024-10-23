@@ -15,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,10 +27,6 @@ import java.util.List;
 @Service
 public class JiraQueryServiceImpl implements JiraQueryService {
 
-    /**
-     * Стартовое число месяца.
-     */
-    public static final int START_DAY_OF_MONTH = 1;
     /**
      * Список пользователей.
      */
@@ -72,13 +66,13 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      */
     @Override
     public void getDailyReport() {
-        TodayDate today = getCurrentDate();
+        TodayDate today = TodayDate.getCurrentDay();
         JSONObject dayPayload = preparePayload(today, false);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(dayPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(dayPayload);
 
-        String textMessage = messageComposer.prepareDailyMessage(usersLogTime, requiredLogTime);
+        String textMessage = messageComposer.prepareDailyMessage(usersLogTime, requiredLogTime, today);
         messageSender.sendMessage(textMessage);
         log.info(" == END OF DAILY REPORT == ");
     }
@@ -88,13 +82,13 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      */
     @Override
     public void getWeeklyReport() {
-        TodayDate today = getCurrentDate();
+        TodayDate today = TodayDate.getCurrentDay();
         JSONObject weekPayload = preparePayload(today, true);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(weekPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(weekPayload);
 
-        String textMessage = messageComposer.prepareWeeklyMessage(usersLogTime, requiredLogTime);
+        String textMessage = messageComposer.prepareWeeklyMessage(usersLogTime, requiredLogTime, today);
         messageSender.sendMessage(textMessage);
         log.info(" == END OF WEEKLY REPORT == ");
     }
@@ -104,13 +98,13 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      */
     @Override
     public void getMonthlyReport() {
-        TodayDate today = getCurrentDate();
+        TodayDate today = TodayDate.getCurrentDay();
         JSONObject monthPayload = preparePayload(today);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(monthPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(monthPayload);
 
-        String textMessage = messageComposer.prepareMonthlyMessage(usersLogTime, requiredLogTime);
+        String textMessage = messageComposer.prepareMonthlyMessage(usersLogTime, requiredLogTime, today);
         messageSender.sendMessage(textMessage);
         log.info(" == END OF MONTHLY REPORT == ");
     }
@@ -122,19 +116,19 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      * @return ответ
      */
     private JSONObject preparePayload(final TodayDate today) {
-        LocalDate localDate = today.getDayObject();
-
-        int day = localDate.getDayOfMonth();
-        int month = localDate.getMonthValue();
-        int year = localDate.getYear();
-
         JSONObject jsonObject = new JSONObject();
 
-        jsonObject.put("from", year + "-" + month + "-" + START_DAY_OF_MONTH);
-        jsonObject.put("to", year + "-" + month + "-" + day);
+        jsonObject.put("from", today.getYear() + "-" + today.getMonth() + "-" + today.getStartDay());
+        jsonObject.put("to", today.getYear() + "-" + today.getMonth() + "-" + today.getEndDay());
         jsonObject.put("worker", getUserNames());
         log.info(" == MONTHLY REPORT == ");
-        log.info("FROM {}-{}-{} TO {}-{}-{}", START_DAY_OF_MONTH, month, year, day, month, year);
+        log.info("FROM {}-{}-{} TO {}-{}-{}",
+                today.getStartDay(),
+                today.getMonth(),
+                today.getYear(),
+                today.getEndDay(),
+                today.getMonth(),
+                today.getYear());
         return jsonObject;
     }
 
@@ -147,31 +141,25 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      * @return ответ
      */
     private JSONObject preparePayload(final TodayDate today, final boolean fromWeekStart) {
-        int year = today.getYear();
-        int month = today.getMonth();
-        int day = today.getDay();
         JSONObject jsonObject = new JSONObject();
         if (fromWeekStart) {
-            LocalDate monday = today.getDayObject();
-            while (monday.getDayOfWeek() != DayOfWeek.MONDAY) {
-                monday = monday.minusDays(1);
-            }
-
-            int mondayDay = monday.getDayOfMonth();
-            int mondayMonth = monday.getMonthValue();
-            int mondayYear = monday.getYear();
-
-            jsonObject.put("from", mondayYear + "-" + mondayMonth + "-" + mondayDay);
-            jsonObject.put("to", year + "-" + month + "-" + day);
+            jsonObject.put("from", today.getMondayYear() + "-" + today.getMondayMonth() + "-" + today.getMondayDay());
+            jsonObject.put("to", today.getSundayYear() + "-" + today.getSundayMonth() + "-" + today.getSundayDay());
             jsonObject.put("worker", getUserNames());
             log.info(" == WEEKLY REPORT == ");
-            log.info("FROM {}-{}-{} TO {}-{}-{}", mondayDay, mondayMonth, mondayYear, day, month, year);
+            log.info("FROM {}-{}-{} TO {}-{}-{}",
+                    today.getMondayDay(),
+                    today.getMondayMonth(),
+                    today.getMondayYear(),
+                    today.getSundayDay(),
+                    today.getSundayMonth(),
+                    today.getSundayYear());
         } else {
-            jsonObject.put("from", year + "-" + month + "-" + day);
-            jsonObject.put("to", year + "-" + month + "-" + day);
+            jsonObject.put("from", today.getYear() + "-" + today.getMonth() + "-" + today.getDay());
+            jsonObject.put("to", today.getYear() + "-" + today.getMonth() + "-" + today.getDay());
             jsonObject.put("worker", getUserNames());
             log.info(" == DAILY REPORT == ");
-            log.info("DATE: {}-{}-{}", day, month, year);
+            log.info("DATE: {}-{}-{}", today.getDay(), today.getMonth(), today.getYear());
         }
         return jsonObject;
     }
@@ -195,20 +183,5 @@ public class JiraQueryServiceImpl implements JiraQueryService {
             i++;
         }
         return users;
-    }
-
-    /**
-     * Вспомогательный метод для полуяения текущей даты.
-     *
-     * @return текущая дата
-     */
-    public static TodayDate getCurrentDate() {
-        LocalDate today = LocalDate.now();
-        return TodayDate.builder()
-                .day(today.getDayOfMonth())
-                .month(today.getMonthValue())
-                .year(today.getYear())
-                .dayObject(today)
-                .build();
     }
 }

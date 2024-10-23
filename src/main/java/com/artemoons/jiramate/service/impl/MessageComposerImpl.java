@@ -9,15 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
-import static com.artemoons.jiramate.service.impl.JiraQueryServiceImpl.getCurrentDate;
 
 /**
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
@@ -41,19 +37,21 @@ public class MessageComposerImpl implements MessageComposer {
      * {@inheritDoc}
      */
     @Override
-    public String prepareDailyMessage(final JiraResponse[] worklogHours, final WorktimeResponse worktimeResponse) {
+    public String prepareDailyMessage(final JiraResponse[] worklogHours,
+                                      final WorktimeResponse worktimeResponse,
+                                      final TodayDate today) {
 
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
 
         int workHours = new BigDecimal(worktimeResponse.getWorkingTime() / TO_HOURS).intValue();
 
-        LocalDate today = LocalDate.now();
         final String[] userWorklogInfo = {""};
         prepareMessageLines(worklogData, workHours, userWorklogInfo);
 
-        return "🤖 Сводка по записям о работе *за " + today.getDayOfMonth() + "\\/" + today.getMonthValue() + "\\/"
-                + today.getYear() + " \\(" + workHours + " ч\\.\\)*:\n\n"
+        return "🤖 Сводка по записям о работе *за день*\\.\n\n"
+                + "📅 " + today.getDay() + "\\." + today.getMonth() + "\\." + today.getYear() + "\n\n"
+                + "🕗 Рабочих дней: " + worktimeResponse.getWorkingDays() + ", часов: " + workHours + "\\. \n\n"
                 + userWorklogInfo[0]
                 + "\n↪ [Перейти в Jira](https://jira.cbr.ru/secure/Dashboard.jspa)";
     }
@@ -62,7 +60,9 @@ public class MessageComposerImpl implements MessageComposer {
      * {@inheritDoc}
      */
     @Override
-    public String prepareWeeklyMessage(final JiraResponse[] worklogHours, final WorktimeResponse worktimeResponse) {
+    public String prepareWeeklyMessage(final JiraResponse[] worklogHours,
+                                       final WorktimeResponse worktimeResponse,
+                                       final TodayDate today) {
 
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
@@ -73,6 +73,8 @@ public class MessageComposerImpl implements MessageComposer {
         prepareMessageLines(worklogData, workHours, userWorklogInfo);
 
         return "🤖 Сводка по записям о работе *за неделю*\\.\n\n"
+                + "📅 " + today.getMondayDay() + "\\." + today.getMondayMonth() + "\\." + today.getMondayYear() + " \\- "
+                + today.getSundayDay() + "\\." + today.getSundayMonth() + "\\." + today.getSundayYear() + "\n\n"
                 + "🕗 Рабочих дней: " + worktimeResponse.getWorkingDays() + ", часов: " + workHours + "\\. \n\n"
                 + userWorklogInfo[0]
                 + "\n↪ [Перейти в Jira](https://jira.cbr.ru/secure/Dashboard.jspa)";
@@ -83,7 +85,9 @@ public class MessageComposerImpl implements MessageComposer {
      * {@inheritDoc}
      */
     @Override
-    public String prepareMonthlyMessage(final JiraResponse[] worklogHours, final WorktimeResponse worktimeResponse) {
+    public String prepareMonthlyMessage(final JiraResponse[] worklogHours,
+                                        final WorktimeResponse worktimeResponse,
+                                        final TodayDate today) {
 
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
@@ -93,8 +97,9 @@ public class MessageComposerImpl implements MessageComposer {
         final String[] userWorklogInfo = {""};
         prepareMessageLines(worklogData, workHours, userWorklogInfo);
 
-        String periodString = getPeriodString();
-        return "🤖 Сводка по записям о работе \n *за месяц " + periodString + "*:\n\n"
+        return "🤖 Сводка по записям о работе \n *за месяц*:\n\n"
+                + "📅 " + today.getStartDay() + "\\." + today.getStartMonth() + "\\." + today.getStartYear() + " \\- "
+                + today.getEndDay() + "\\." + today.getEndMonth() + "\\." + today.getEndYear() + "\n\n"
                 + "🕗 Рабочих дней: " + worktimeResponse.getWorkingDays() + ", часов: " + workHours + "\\. \n\n"
                 + userWorklogInfo[0]
                 + "\n↪ [Перейти в Jira](https://jira.cbr.ru/secure/Dashboard.jspa)";
@@ -127,7 +132,7 @@ public class MessageComposerImpl implements MessageComposer {
      */
     private void updateNames(final Map<String, Double> worklogData) {
         Map<String, Double> tempWorklogData = new HashMap<>();
-        List<String> replacementMap = userList.stream().filter(name -> name.contains("/")).collect(Collectors.toList());
+        List<String> replacementMap = userList.stream().filter(name -> name.contains("/")).toList();
         Map<String, String> replacementDictionary = new HashMap<>();
         replacementMap.forEach(item -> {
             replacementDictionary.put(item.replaceAll(".?[^/]*$", ""),
@@ -196,18 +201,5 @@ public class MessageComposerImpl implements MessageComposer {
                     key,
                     timeInHours));
         });
-    }
-
-    /**
-     * Вспомогательный метод для формирования строки.
-     *
-     * @return строка
-     */
-    private static String getPeriodString() {
-        TodayDate currentDate = getCurrentDate();
-        int day = currentDate.getDay();
-        int month = currentDate.getMonth();
-        int year = currentDate.getYear();
-        return "\\(c 1\\-" + month + "\\-" + year + " по " + day + "\\-" + month + "\\-" + year + "\\)";
     }
 }
