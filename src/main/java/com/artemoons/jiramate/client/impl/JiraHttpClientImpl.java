@@ -5,7 +5,6 @@ import com.artemoons.jiramate.dto.JiraResponse;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 import com.artemoons.jiramate.util.SSLUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -18,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 import java.util.HashMap;
 
 /**
@@ -102,11 +102,10 @@ public class JiraHttpClientImpl implements JiraHttpClient {
      */
     private HttpHeaders getHeaders() {
         String plainCreds = userLogin + ":" + userPassword;
-        byte[] plainCredsBytes = plainCreds.getBytes();
-        byte[] base64CredsBytes = Base64.encodeBase64(plainCredsBytes);
+        String base64Creds = Base64.getEncoder().encodeToString(plainCreds.getBytes());
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.add("Authorization", "Basic " + new String(base64CredsBytes));
+        headers.add("Authorization", "Basic " + base64Creds);
         return headers;
     }
 }
