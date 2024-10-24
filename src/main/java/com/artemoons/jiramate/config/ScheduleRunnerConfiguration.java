@@ -4,7 +4,7 @@ import com.artemoons.jiramate.service.JiraQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  */
 @Slf4j
 @Component
-@EnableScheduling
+//@EnableScheduling
 public class ScheduleRunnerConfiguration {
 
     /**
@@ -47,7 +47,7 @@ public class ScheduleRunnerConfiguration {
     /**
      * Method for everyday run.
      */
-//    @Scheduled(cron = "${application.cron-time.daily}")
+    @Scheduled(cron = "${application.cron-time.daily}")
     public final void runDaily() {
         log.info("Run daily CRON schedule: {}", dailyCron);
         service.getDailyReport();
@@ -56,7 +56,7 @@ public class ScheduleRunnerConfiguration {
     /**
      * Method for every week run.
      */
-//    @Scheduled(cron = "${application.cron-time.weekly}")
+    @Scheduled(cron = "${application.cron-time.weekly}")
     public final void runWeekly() {
         log.info("Run weekly CRON schedule: {}", weeklyCron);
         service.getWeeklyReport();

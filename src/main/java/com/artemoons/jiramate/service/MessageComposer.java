@@ -32,7 +32,7 @@ public interface MessageComposer {
     String prepareWeeklyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
     /**
-     * Method for preparing monthly message
+     * Method for preparing monthly message.
      *
      * @param worklogHours     worklog information
      * @param worktimeResponse available time information

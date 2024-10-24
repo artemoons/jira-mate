@@ -173,7 +173,7 @@ public class JiraQueryServiceImpl implements JiraQueryService {
         // .?[^/]*$ after
         List<String> users = new ArrayList<>(userList);
         int i = 0;
-        String newValue = "null";
+        String newValue;
         for (String item : users) {
             if (item.contains("/")) {
                 newValue = item.replaceAll(".?[^/]*$", "");

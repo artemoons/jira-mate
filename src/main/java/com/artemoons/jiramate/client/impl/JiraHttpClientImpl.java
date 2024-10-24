@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.KeyManagementException;
@@ -58,18 +60,21 @@ public class JiraHttpClientImpl implements JiraHttpClient {
      * {@inheritDoc}
      */
     public final JiraResponse[] getWorklogs(final JSONObject payload) {
-        JiraResponse[] jiraResponse = new JiraResponse[]{};
+        ResponseEntity<JiraResponse[]> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         try {
             SSLUtil.turnOffSslCheck();
-            jiraResponse = template.postForObject(searchApiUrl,
-                    new HttpEntity<>(payload.toString(), getHeaders()), JiraResponse[].class);
+            response = template.exchange(searchApiUrl,
+                    HttpMethod.POST,
+                    new HttpEntity<>(payload.toString(), getHeaders()),
+                    JiraResponse[].class);
             SSLUtil.turnOnSslChecking();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             log.error("Can't disable/enable SSL verification");
-        } catch (RestClientException ex) {
-            throw new RuntimeException("Error occurred when connecting to Jira, check credentials first!");
+        } catch (HttpServerErrorException ex) {
+            log.error("Jira API returned error, code: {}", ex.getStatusCode().value());
+            throw new RuntimeException("Detailed stacktrace: " + ex.getResponseBodyAsString());
         }
-        return jiraResponse;
+        return response.getBody();
     }
 
     /**
@@ -77,22 +82,22 @@ public class JiraHttpClientImpl implements JiraHttpClient {
      */
     public final WorktimeResponse getRequiredTimeForPeriod(final JSONObject payload) {
         String payloadUrl = String.format("?from=%s&to=%s", payload.get("from"), payload.get("to"));
-        WorktimeResponse jiraResponse = new WorktimeResponse();
+        ResponseEntity<WorktimeResponse> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         try {
             SSLUtil.turnOffSslCheck();
-            jiraResponse = template.exchange(worktimeApiUrl + payloadUrl,
+            response = template.exchange(worktimeApiUrl + payloadUrl,
                     HttpMethod.GET,
                     new HttpEntity<>(payload.toString(), getHeaders()),
                     WorktimeResponse.class,
-                    new HashMap<>()).getBody();
+                    new HashMap<>());
             SSLUtil.turnOnSslChecking();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
             log.error("Can't disable/enable SSL verification");
-        } catch (RestClientException ex) {
-            log.error(ex.getMessage());
-            throw new RuntimeException("Error occurred when connecting to Jira, check credentials first!");
+        } catch (HttpServerErrorException ex) {
+            log.error("Jira API returned error, code: {}", ex.getStatusCode().value());
+            throw new RuntimeException("Detailed stacktrace: " + ex.getResponseBodyAsString());
         }
-        return jiraResponse;
+        return response.getBody();
     }
 
     /**

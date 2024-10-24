@@ -59,11 +59,11 @@ public class BotRegistrarComponent {
         try {
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new BotInitializer(telegramBotToken, telegramBotName, wrapper));
-            log.info("Success! Bot registered!");
             log.info("Parameters:");
             log.info("Token: " + botConfiguration.getBotToken());
             log.info("Name: " + botConfiguration.getBotName());
             log.info("Chat ID: " + botConfiguration.getChatId().toString());
+            log.info("Success! Bot registered!");
         } catch (TelegramApiException e) {
             log.error("Failure! Error occurred when trying to register bot!");
             e.printStackTrace();
