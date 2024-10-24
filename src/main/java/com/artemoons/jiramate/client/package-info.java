@@ -1,5 +1,5 @@
 /**
- * Пакет, содержащий классы для работы с Jira.
+ * Jira-related classes.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */

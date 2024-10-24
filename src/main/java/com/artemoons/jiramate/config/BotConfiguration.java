@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.telegram.telegrambots.bots.DefaultBotOptions;
 
 /**
- * Конфигурация бота.
+ * Bot configuration.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -15,25 +15,25 @@ import org.telegram.telegrambots.bots.DefaultBotOptions;
 public class BotConfiguration {
 
     /**
-     * Токен.
+     * Token.
      */
     @Value("${integration.telegram.bot-token}")
     private String botToken;
 
     /**
-     * Имя бота.
+     * Bot name.
      */
     @Value("${integration.telegram.bot-name}")
     private String botName;
 
     /**
-     * Идентификатор чата.
+     * Chat identifier.
      */
     @Value("${integration.telegram.chat-id}")
     private Long chatId;
 
     /**
-     * Опции.
+     * Bot options.
      */
     private final DefaultBotOptions botOptions = new DefaultBotOptions();
 

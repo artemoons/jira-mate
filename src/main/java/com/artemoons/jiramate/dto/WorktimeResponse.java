@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Ответ с информацией о доступном времени работы за период.
+ * Available worklog information DTO.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -16,13 +16,13 @@ import lombok.Setter;
 public class WorktimeResponse {
 
     /**
-     * Число рабочих дней.
+     * Number of work days.
      */
     @JsonProperty("numberOfWorkingDays")
     private Integer workingDays;
 
     /**
-     * Количество доступного времени за период (в мс).
+     * Available log time in seconds.
      */
     @JsonProperty("requiredSeconds")
     private Long workingTime;

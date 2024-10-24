@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Вспомогательная обёртка над вызовом методов.
+ * Actions wrapper.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -15,15 +15,15 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class ActionWrapperImpl implements ActionWrapper {
 
     /**
-     * Сервис для работы с Jira.
+     * Jira service.
      */
     @Autowired
     private JiraQueryService service;
 
     /**
-     * Метод обработки полученного сообщения.
+     * Method for processing incoming message.
      *
-     * @param update сообщение
+     * @param update message
      */
     @Override
     public void processUpdate(final Update update) {

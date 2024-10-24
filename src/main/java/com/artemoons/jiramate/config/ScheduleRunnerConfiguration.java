@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Component;
 
 /**
- * Конфигурация планировщика.
+ * Scheduler configuration.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -18,26 +18,26 @@ import org.springframework.stereotype.Component;
 public class ScheduleRunnerConfiguration {
 
     /**
-     * CRON для ежедневного выполнения.
+     * Every day CRON.
      */
     @Value("${application.cron-time.daily}")
     private String dailyCron;
 
     /**
-     * CRON для еженедельного выполнения.
+     * Every week CRON.
      */
     @Value("${application.cron-time.weekly}")
     private String weeklyCron;
 
     /**
-     * Сервис для работы с Jira.
+     * Jira service.
      */
     private final JiraQueryService service;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param queryService сервис для работы с Jira
+     * @param queryService Jira service
      */
     @Autowired
     public ScheduleRunnerConfiguration(final JiraQueryService queryService) {
@@ -45,7 +45,7 @@ public class ScheduleRunnerConfiguration {
     }
 
     /**
-     * Метод для ежедневного запуска.
+     * Method for everyday run.
      */
 //    @Scheduled(cron = "${application.cron-time.daily}")
     public final void runDaily() {
@@ -54,7 +54,7 @@ public class ScheduleRunnerConfiguration {
     }
 
     /**
-     * Метод для еженедельного запуска.
+     * Method for every week run.
      */
 //    @Scheduled(cron = "${application.cron-time.weekly}")
     public final void runWeekly() {

@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /**
- * Ответ Jira.
+ * Jira response DTO.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -16,19 +16,19 @@ import lombok.Setter;
 public class JiraResponse {
 
     /**
-     * Затраченное время (в мс).
+     * Time spent in seconds.
      */
     @JsonProperty("timeSpentSeconds")
     private Double timeSpentSeconds;
 
     /**
-     * Дата записи о работе.
+     * Worklog date.
      */
     @JsonProperty("started")
     private String worklogDate;
 
     /**
-     * Имя автора записи о работе.
+     * Worklog author.
      */
     @JsonProperty("worker")
     private String worklogAuthor;

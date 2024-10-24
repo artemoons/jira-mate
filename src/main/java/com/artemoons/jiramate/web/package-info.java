@@ -1,5 +1,5 @@
 /**
- * Пакет контроллеров.
+ * Controllers package.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */

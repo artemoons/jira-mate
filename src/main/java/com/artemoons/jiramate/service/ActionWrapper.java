@@ -3,16 +3,16 @@ package com.artemoons.jiramate.service;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Интерфейс для работы с обёрткой над действиями.
+ * Interface for actions wrapper.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 public interface ActionWrapper {
 
     /**
-     * Метод обработки события.
+     * Event update processor.
      *
-     * @param update событие (сообщние)
+     * @param update event (message sent to bot)
      */
     void processUpdate(Update update);
 

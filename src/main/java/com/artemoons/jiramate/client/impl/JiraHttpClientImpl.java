@@ -21,7 +21,7 @@ import java.util.Base64;
 import java.util.HashMap;
 
 /**
- * HTTP-клиент для работы с Jira.
+ * Jira HTTP client.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -34,22 +34,22 @@ public class JiraHttpClientImpl implements JiraHttpClient {
      */
     private final RestTemplate template = new RestTemplate();
     /**
-     * API поиска worklog.
+     * Worklog Jira API.
      */
     @Value("${integration.jira.search-api-url}")
     private String searchApiUrl;
     /**
-     * API поиска доступного времени работы.
+     * Tempo Jira API.
      */
     @Value("${integration.jira.worktime-api-url}")
     private String worktimeApiUrl;
     /**
-     * Логин Jira.
+     * Jira login.
      */
     @Value("${integration.jira.user-login}")
     private String userLogin;
     /**
-     * Пароль Jira.
+     * Jira password.
      */
     @Value("${integration.jira.user-password}")
     private String userPassword;
@@ -96,9 +96,9 @@ public class JiraHttpClientImpl implements JiraHttpClient {
     }
 
     /**
-     * Вспомогательный метод для подготовки заголовков обращения к Jira.
+     * Auxiliary method for preparing Jira HTTP headers.
      *
-     * @return заголовки
+     * @return headers
      */
     private HttpHeaders getHeaders() {
         String plainCreds = userLogin + ":" + userPassword;

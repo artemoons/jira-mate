@@ -1,5 +1,5 @@
 /**
- * Реализация клиента для работы с Jira.
+ * HTTP client for Jira.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */

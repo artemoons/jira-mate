@@ -5,39 +5,39 @@ import com.artemoons.jiramate.dto.TodayDate;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 
 /**
- * Интерфейс для работы с составителем сообщения.
+ * Message composer interface.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 public interface MessageComposer {
 
     /**
-     * Метод для подготовки сообщения о записях о работе за день.
+     * Method for preparing daily message.
      *
-     * @param worklogHours     информация о затраченных часах
-     * @param worktimeResponse информация о доступных часах
-     * @param today            информация о текущем дне
-     * @return сформированное сообщения
+     * @param worklogHours     worklog information
+     * @param worktimeResponse available time information
+     * @param today            current day
+     * @return generated message
      */
     String prepareDailyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
     /**
-     * Метод для подготовки сообщения о записях о работе за неделю.
+     * Method for preparing weekly message.
      *
-     * @param worklogHours     информация о затраченных часах
-     * @param worktimeResponse информация о доступных часах
-     * @param today            информация о текущем дне
-     * @return сформированное сообщения
+     * @param worklogHours     worklog information
+     * @param worktimeResponse available time information
+     * @param today            current day
+     * @return generated message
      */
     String prepareWeeklyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 
     /**
-     * Метод для подготовки сообщения о записях о работе за месяц.
+     * Method for preparing monthly message
      *
-     * @param worklogHours     информация о затраченных часах
-     * @param worktimeResponse информация о доступных часах
-     * @param today            информация о текущем дне
-     * @return сформированное сообщения
+     * @param worklogHours     worklog information
+     * @param worktimeResponse available time information
+     * @param today            current day
+     * @return generated message
      */
     String prepareMonthlyMessage(JiraResponse[] worklogHours, WorktimeResponse worktimeResponse, TodayDate today);
 

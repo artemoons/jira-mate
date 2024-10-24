@@ -6,7 +6,7 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 /**
- * Вспомогательный класс для инициализации бота.
+ * Auxiliary class for bot initialization.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -14,21 +14,21 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 public class BotInitializer extends TelegramLongPollingBot {
 
     /**
-     * Обёртка над исполнителем действий.
+     * Action wrapper.
      */
     private final ActionWrapper actionWrapper;
 
     /**
-     * Имя Telegram бота.
+     * Telegram bot name.
      */
     private final String telegramBotName;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param token   токен
-     * @param name    имя бота
-     * @param wrapper обёртка над исполнителем действий
+     * @param token   token
+     * @param name    bot name
+     * @param wrapper action wrapper
      */
     public BotInitializer(final String token, final String name, final ActionWrapper wrapper) {
         super(token);

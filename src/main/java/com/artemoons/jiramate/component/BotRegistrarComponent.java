@@ -12,7 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 /**
- * Вспомогательный класс для регистрации бота.
+ * Auxiliary class for bot registration.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -20,30 +20,29 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 @Component
 public class BotRegistrarComponent {
     /**
-     * Обёртка над исполнителем действий.
+     * Action wrapper.
      */
     private final ActionWrapper wrapper;
     /**
-     * Токен доступа бота Telegram.
+     * Telegram bot token.
      */
     @Value("${integration.telegram.bot-token}")
     private String telegramBotToken;
     /**
-     * Имя Telegram бота.
+     * Telegram bot name.
      */
     @Value("${integration.telegram.bot-name}")
     private String telegramBotName;
-
     /**
-     * Конфигурация бота.
+     * Bot configuration.
      */
     private final BotConfiguration botConfiguration;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param actionWrapper обёртка над исполнителем действий
-     * @param config        конфигурация бота
+     * @param actionWrapper action wrapper
+     * @param config        bot configuration
      */
     @Autowired
     public BotRegistrarComponent(final ActionWrapper actionWrapper, final BotConfiguration config) {
@@ -52,7 +51,7 @@ public class BotRegistrarComponent {
     }
 
     /**
-     * Метод для регистрации бота.
+     * Method for bot registration.
      */
     @PostConstruct
     private void registerBot() {

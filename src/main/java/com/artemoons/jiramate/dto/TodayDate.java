@@ -7,7 +7,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 /**
- * Вспомогательное DTO для текущей даты.
+ * Auxiliary DTO for current date.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -15,74 +15,74 @@ import java.time.LocalDate;
 @Getter
 public class TodayDate {
     /**
-     * Объект текущего дня.
+     * Current day object.
      */
     private final LocalDate dayObject;
     /**
-     * Текущий день.
+     * Current day.
      */
     private final int day;
     /**
-     * Текущий месяц.
+     * Current month.
      */
     private final int month;
     /**
-     * Текущий год.
+     * Current year.
      */
     private final int year;
     /**
-     * День начала недели (ПН).
+     * Week start day (MON).
      */
     private final int mondayDay;
     /**
-     * Месяц начала недели.
+     * Month of start day.
      */
     private final int mondayMonth;
     /**
-     * Год начала недели.
+     * Year of start day.
      */
     private final int mondayYear;
     /**
-     * День конца недели (ВС).
+     * Weekend (SUN).
      */
     private final int sundayDay;
     /**
-     * Месяц конца недели.
+     * Weekend month.
      */
     private final int sundayMonth;
     /**
-     * Год конца недели.
+     * Weekend year.
      */
     private final int sundayYear;
     /**
-     * День начала месяца.
+     * Day of month start.
      */
     private final int startDay;
     /**
-     * Месяц дня начала месяца.
+     * Month of "Day of month start".
      */
     private final int startMonth;
     /**
-     * Год дня начала месяца.
+     * Year of "Day of month start".
      */
     private final int startYear;
     /**
-     * Конечный день месяца.
+     * Day of month end.
      */
     private final int endDay;
     /**
-     * Месяц конечного дня месяца.
+     * Month of "Day of month end".
      */
     private final int endMonth;
     /**
-     * Год конечного дня месяца.
+     * Year of "Day of month end".
      */
     private final int endYear;
 
     /**
-     * Вспомогательный метод для получения текущего дня и зависимых от него величин.
+     * Auxiliary method for obtaining current day and other common information.
      *
-     * @return объект сегодняшнего дня
+     * @return current day object
      */
     public static TodayDate getCurrentDay() {
         LocalDate today = LocalDate.now();

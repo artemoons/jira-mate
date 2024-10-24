@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Контроллер для работы с ботом.
+ * Controller for interaction with bot functions (currently for debug purposes).
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class Controller {
 
     /**
-     * Сервис работы с Jira.
+     * Jira query service.
      */
     private final JiraQueryService queryService;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param service сервис работы с Jira
+     * @param service Jira query service
      */
     @Autowired
     public Controller(final JiraQueryService service) {
@@ -31,7 +31,7 @@ public class Controller {
     }
 
     /**
-     * Отладочный контроллер.
+     * Debug controller.
      */
     @GetMapping("/query")
     private void getJiraResults() {

@@ -5,25 +5,25 @@ import com.artemoons.jiramate.dto.WorktimeResponse;
 import org.json.JSONObject;
 
 /**
- * Интерфейс для работы с клиентом Jira.
+ * Jira client interface.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 public interface JiraHttpClient {
 
     /**
-     * Метод для получения всех записей о работе.
+     * Method for obtaining all worklogs.
      *
-     * @param payload сформированное тело запроса
-     * @return ответ
+     * @param payload request body
+     * @return response
      */
     JiraResponse[] getWorklogs(JSONObject payload);
 
     /**
-     * Метод для получения доступного времени работы за период.
+     * Method for obtaining available worklog time for period.
      *
-     * @param payload сформированное тело запроса
-     * @return ответ, содержащий информацию о том, сколько времени было доступно для трекинга
+     * @param payload request body
+     * @return available worklog time
      */
     WorktimeResponse getRequiredTimeForPeriod(JSONObject payload);
 

@@ -45,6 +45,11 @@ After all these parameters set, you can run app in IDE or in CMD by calling `mvn
 Artem Utkin  
 [tema-utkin.ru](tema-utkin.ru)
 
+## To-Do List
+
+- [ ] Disable SSL once per request?
+- [x] Javadocs in English
+
 ## Version History
 
 * 0.0.2-SNAPSHOT

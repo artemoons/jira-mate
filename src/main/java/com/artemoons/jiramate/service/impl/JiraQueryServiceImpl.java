@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Сервис обращения к Jira.
+ * Jira query service.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -28,29 +28,29 @@ import java.util.List;
 public class JiraQueryServiceImpl implements JiraQueryService {
 
     /**
-     * Список пользователей.
+     * Users list.
      */
     @Value("${integration.jira.user-list}")
     private List<String> userList;
     /**
-     * Сервис отправки сообщения в Telegram.
+     * Telegram message sender service.
      */
     private final MessageSender messageSender;
     /**
-     * Сервис формирования сообщения.
+     * Message composer service.
      */
     private final MessageComposer messageComposer;
     /**
-     * Клиент для обращения к Jira.
+     * Jira HTTP client.
      */
     private final JiraHttpClient jiraHttpClient;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param composer         сервис формирования сообщения
-     * @param botConfiguration конфигурация бота
-     * @param jiraClient       клиент для обращения к jira
+     * @param composer         message composer service
+     * @param botConfiguration bot configuration
+     * @param jiraClient       Jira http client
      */
     @Autowired
     public JiraQueryServiceImpl(final MessageComposer composer,
@@ -110,10 +110,10 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     }
 
     /**
-     * Вспомогательный метод для формирования тела запроса к Jira (данные за месяц).
+     * Auxiliary method for constructing message body for Jira request (per month).
      *
-     * @param today текущая дата
-     * @return ответ
+     * @param today current date
+     * @return response
      */
     private JSONObject preparePayload(final TodayDate today) {
         JSONObject jsonObject = new JSONObject();
@@ -133,12 +133,11 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     }
 
     /**
-     * Вспомогательный метод для формирования тела запроса к Jira (данные за день / неделю).
+     * Auxiliary method for constructing message body for Jira request (per day / week).
      *
-     * @param today         текущая дата
-     * @param fromWeekStart флаг начала недели: true - запрос периода с первого дня текущей недели,
-     *                      false - запрос за день
-     * @return ответ
+     * @param today         current date
+     * @param fromWeekStart week start flag: true - start from Monday, false - start from current date
+     * @return response
      */
     private JSONObject preparePayload(final TodayDate today, final boolean fromWeekStart) {
         JSONObject jsonObject = new JSONObject();
@@ -165,9 +164,9 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     }
 
     /**
-     * Вспомогательный метод для получения списка пользователей.
+     * Auxiliary method for obtaining user list.
      *
-     * @return список логинов пользователей
+     * @return users login list
      */
     private List<String> getUserNames() {
         // ^[^/]* before

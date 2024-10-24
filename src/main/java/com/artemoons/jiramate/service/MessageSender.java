@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 /**
- * Сервис отправки сообщений.
+ * Message sender service.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -18,14 +18,14 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class MessageSender extends DefaultAbsSender {
 
     /**
-     * Конфигурация бота.
+     * Bot configuration.
      */
     private final BotConfiguration botConfiguration;
 
     /**
-     * Конструктор.
+     * Constructor.
      *
-     * @param config конфигурация бота
+     * @param config bot configuration
      */
     @Autowired
     public MessageSender(final BotConfiguration config) {
@@ -34,9 +34,9 @@ public class MessageSender extends DefaultAbsSender {
     }
 
     /**
-     * Метод отправки сообщения.
+     * Method for message send.
      *
-     * @param textMessage текст сообщения
+     * @param textMessage message text
      */
     public void sendMessage(final String textMessage) {
         SendMessage message = new SendMessage();

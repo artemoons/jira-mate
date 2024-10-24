@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * Message composing service.
+ *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 @Slf4j
@@ -23,12 +25,12 @@ import java.util.Map;
 public class MessageComposerImpl implements MessageComposer {
 
     /**
-     * Коэффициент для перевода секунд в часы.
+     * Coefficient for converting seconds to hours.
      */
     public static final Double TO_HOURS = 3_600.0;
 
     /**
-     * Список пользователей.
+     * User list.
      */
     @Value("${integration.jira.user-list}")
     private List<String> userList;
@@ -107,10 +109,10 @@ public class MessageComposerImpl implements MessageComposer {
     }
 
     /**
-     * Вспомогательный метод для обогащения записей информацией о затраченном времени.
+     * Auxiliary method for populating records with time spent information.
      *
-     * @param worklogData  исходные данные
-     * @param worklogHours часы работы по пользователям
+     * @param worklogData  source data
+     * @param worklogHours user worklogs
      */
     private void populateWorklog(final Map<String, Double> worklogData, final JiraResponse[] worklogHours) {
         for (JiraResponse item : worklogHours) {
@@ -126,9 +128,9 @@ public class MessageComposerImpl implements MessageComposer {
     }
 
     /**
-     * Вспомогательный метод для обновления имён.
+     * Auxiliary method for updating names.
      *
-     * @param worklogData обновлённая информация - имена в человекочитаемом виде
+     * @param worklogData usernames in human-readable view
      */
     private void updateNames(final Map<String, Double> worklogData) {
         Map<String, Double> tempWorklogData = new HashMap<>();
@@ -148,9 +150,9 @@ public class MessageComposerImpl implements MessageComposer {
     }
 
     /**
-     * Вспомогательный метод для инициализации карты заспией о работе.
+     * Auxiliary method for initialization worklog map.
      *
-     * @return проинициализированный объект
+     * @return initialized object
      */
     private Map<String, Double> initWorklogMap() {
         Map<String, Double> worklogData = new Hashtable<>();
@@ -159,9 +161,9 @@ public class MessageComposerImpl implements MessageComposer {
     }
 
     /**
-     * Метод для получения имён пользователей, пригодных к отправке в Jira.
+     * Method for obtaining usernames, suitable for Jira API.
      *
-     * @return имена пользователей
+     * @return user names
      */
     private List<String> getUserNames() {
         // ^[^/]* before
@@ -180,11 +182,11 @@ public class MessageComposerImpl implements MessageComposer {
     }
 
     /**
-     * Вспомогательный метод для подготовки строки о работе для каждого из пользователей.
+     * Auxiliary method for preparing user worklog string.
      *
-     * @param worklogData     информация о работе
-     * @param workingHours    информация о доступных часах работы
-     * @param userWorklogInfo информация о работе пользователя
+     * @param worklogData     worklog information
+     * @param workingHours    available worklog hours
+     * @param userWorklogInfo users' worklog information
      */
     private static void prepareMessageLines(final Map<String, Double> worklogData,
                                             final int workingHours,

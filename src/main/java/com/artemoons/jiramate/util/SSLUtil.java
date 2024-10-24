@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 
 /**
- * Утилита для включения/отключения проверки SSL соединения.
+ * Utility for enabling/disabling SSL connection check.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
@@ -21,7 +21,7 @@ import java.security.cert.X509Certificate;
 public final class SSLUtil {
 
     /**
-     * Private конструктор.
+     * Private constructor.
      */
     private SSLUtil() {
     }
@@ -44,10 +44,10 @@ public final class SSLUtil {
     };
 
     /**
-     * Метод для отключения проверки SSL.
+     * Method for disabling SSL connection check.
      *
-     * @throws NoSuchAlgorithmException исключение
-     * @throws KeyManagementException   исключение
+     * @throws NoSuchAlgorithmException exception
+     * @throws KeyManagementException   exception
      */
     public static void turnOffSslCheck() throws NoSuchAlgorithmException, KeyManagementException {
         final SSLContext sc = SSLContext.getInstance("SSL");
@@ -57,12 +57,12 @@ public final class SSLUtil {
     }
 
     /**
-     * Метод для включения проверки SSL.
+     * Method for enabling SSL connection check.
      *
-     * @throws KeyManagementException   исключение
-     * @throws NoSuchAlgorithmException исключение
+     * @throws NoSuchAlgorithmException exception
+     * @throws KeyManagementException   exception
      */
-    public static void turnOnSslChecking() throws KeyManagementException, NoSuchAlgorithmException {
+    public static void turnOnSslChecking() throws NoSuchAlgorithmException, KeyManagementException {
         SSLContext.getInstance("SSL").init(null, null, null);
         log.info("SSL verification: ENABLED");
     }

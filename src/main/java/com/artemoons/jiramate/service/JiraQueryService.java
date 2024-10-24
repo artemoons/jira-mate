@@ -1,24 +1,24 @@
 package com.artemoons.jiramate.service;
 
 /**
- * Интерфейс для работы с Jira.
+ * Jira query service interface.
  *
  * @author <a href="mailto:github@eeel.ru">Artem Utkin</a>
  */
 public interface JiraQueryService {
 
     /**
-     * Метод для получения отчёта за день.
+     * Method for obtaining daily report.
      */
     void getDailyReport();
 
     /**
-     * Метод для получения отчёта за неделю.
+     * Method for obtaining weekly report.
      */
     void getWeeklyReport();
 
     /**
-     * Метод для получения отчёта за месяц.
+     * Method for obtaining monthly report.
      */
     void getMonthlyReport();
 
