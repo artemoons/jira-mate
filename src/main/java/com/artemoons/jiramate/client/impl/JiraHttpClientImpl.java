@@ -1,11 +1,13 @@
 package com.artemoons.jiramate.client.impl;
 
 import com.artemoons.jiramate.client.JiraHttpClient;
+import com.artemoons.jiramate.dto.JiraQuery;
 import com.artemoons.jiramate.dto.JiraResponse;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 import com.artemoons.jiramate.util.SSLUtil;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -59,13 +61,14 @@ public class JiraHttpClientImpl implements JiraHttpClient {
     /**
      * {@inheritDoc}
      */
-    public final JiraResponse[] getWorklogs(final JSONObject payload) {
+    public final JiraResponse[] getWorklogs(final JiraQuery payload) {
         ResponseEntity<JiraResponse[]> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        ObjectMapper mapper = new ObjectMapper();
         try {
             SSLUtil.turnOffSslCheck();
             response = template.exchange(searchApiUrl,
                     HttpMethod.POST,
-                    new HttpEntity<>(payload.toString(), getHeaders()),
+                    new HttpEntity<>(mapper.writeValueAsString(payload), getHeaders()),
                     JiraResponse[].class);
             SSLUtil.turnOnSslChecking();
         } catch (NoSuchAlgorithmException | KeyManagementException ex) {
@@ -73,6 +76,9 @@ public class JiraHttpClientImpl implements JiraHttpClient {
         } catch (HttpServerErrorException ex) {
             log.error("Jira API returned error, code: {}", ex.getStatusCode().value());
             throw new RuntimeException("Detailed stacktrace: " + ex.getResponseBodyAsString());
+        } catch (JsonProcessingException ex) {
+            log.error("Error occurred when trying to make JSON from object {}", ex.getMessage());
+            throw new RuntimeException(ex);
         }
         return response.getBody();
     }
@@ -80,14 +86,15 @@ public class JiraHttpClientImpl implements JiraHttpClient {
     /**
      * {@inheritDoc}
      */
-    public final WorktimeResponse getRequiredTimeForPeriod(final JSONObject payload) {
-        String payloadUrl = String.format("?from=%s&to=%s", payload.get("from"), payload.get("to"));
+    public final WorktimeResponse getRequiredTimeForPeriod(final JiraQuery payload) {
+        String payloadUrl = String.format("?from=%s&to=%s", payload.getFromDate(), payload.getToDate());
         ResponseEntity<WorktimeResponse> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        ObjectMapper mapper = new ObjectMapper();
         try {
             SSLUtil.turnOffSslCheck();
             response = template.exchange(worktimeApiUrl + payloadUrl,
                     HttpMethod.GET,
-                    new HttpEntity<>(payload.toString(), getHeaders()),
+                    new HttpEntity<>(mapper.writeValueAsString(payload), getHeaders()),
                     WorktimeResponse.class,
                     new HashMap<>());
             SSLUtil.turnOnSslChecking();
@@ -96,6 +103,9 @@ public class JiraHttpClientImpl implements JiraHttpClient {
         } catch (HttpServerErrorException ex) {
             log.error("Jira API returned error, code: {}", ex.getStatusCode().value());
             throw new RuntimeException("Detailed stacktrace: " + ex.getResponseBodyAsString());
+        } catch (JsonProcessingException ex) {
+            log.error("Error occurred when trying to make JSON from object {}", ex.getMessage());
+            throw new RuntimeException(ex);
         }
         return response.getBody();
     }

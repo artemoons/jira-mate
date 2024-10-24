@@ -61,8 +61,8 @@ Artem Utkin
 
 ## Known issues
 * At some time of testing were found users who had different name to use with Jira API. I don't know why this happened and 
-I didn't ask Jira administrators. If you too can't get worklogs or anything via API by user, try to check its name here:
-`https://<your-Jira-host>/rest/tempo-core/1/users/search`, `POST` with body: 
+I didn't ask Jira administrators for more information. If you too can't get worklogs or anything via API by user, try to
+* check its name here: `https://<your-Jira-host>/rest/tempo-core/1/users/search`, `POST` with body: 
 ```json
 {
     "keys": [
