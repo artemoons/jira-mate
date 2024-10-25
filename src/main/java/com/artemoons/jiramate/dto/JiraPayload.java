@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Getter
 @Builder
-public class JiraQuery {
+public class JiraPayload {
 
     /**
      * Start period date.

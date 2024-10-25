@@ -1,7 +1,7 @@
 package com.artemoons.jiramate.client.impl;
 
 import com.artemoons.jiramate.client.JiraHttpClient;
-import com.artemoons.jiramate.dto.JiraQuery;
+import com.artemoons.jiramate.dto.JiraPayload;
 import com.artemoons.jiramate.dto.JiraResponse;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 import com.artemoons.jiramate.util.SSLUtil;
@@ -61,7 +61,7 @@ public class JiraHttpClientImpl implements JiraHttpClient {
     /**
      * {@inheritDoc}
      */
-    public final JiraResponse[] getWorklogs(final JiraQuery payload) {
+    public final JiraResponse[] getWorklogs(final JiraPayload payload) {
         ResponseEntity<JiraResponse[]> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         ObjectMapper mapper = new ObjectMapper();
         try {
@@ -86,7 +86,7 @@ public class JiraHttpClientImpl implements JiraHttpClient {
     /**
      * {@inheritDoc}
      */
-    public final WorktimeResponse getRequiredTimeForPeriod(final JiraQuery payload) {
+    public final WorktimeResponse getRequiredTimeForPeriod(final JiraPayload payload) {
         String payloadUrl = String.format("?from=%s&to=%s", payload.getFromDate(), payload.getToDate());
         ResponseEntity<WorktimeResponse> response = new ResponseEntity<>(HttpStatus.NO_CONTENT);
         ObjectMapper mapper = new ObjectMapper();

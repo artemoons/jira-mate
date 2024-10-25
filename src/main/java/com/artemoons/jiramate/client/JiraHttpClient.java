@@ -1,6 +1,6 @@
 package com.artemoons.jiramate.client;
 
-import com.artemoons.jiramate.dto.JiraQuery;
+import com.artemoons.jiramate.dto.JiraPayload;
 import com.artemoons.jiramate.dto.JiraResponse;
 import com.artemoons.jiramate.dto.WorktimeResponse;
 
@@ -17,7 +17,7 @@ public interface JiraHttpClient {
      * @param payload request body
      * @return response
      */
-    JiraResponse[] getWorklogs(JiraQuery payload);
+    JiraResponse[] getWorklogs(JiraPayload payload);
 
     /**
      * Method for obtaining available worklog time for period.
@@ -25,6 +25,6 @@ public interface JiraHttpClient {
      * @param payload request body
      * @return available worklog time
      */
-    WorktimeResponse getRequiredTimeForPeriod(JiraQuery payload);
+    WorktimeResponse getRequiredTimeForPeriod(JiraPayload payload);
 
 }

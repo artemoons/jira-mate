@@ -3,7 +3,7 @@ package com.artemoons.jiramate.service.impl;
 import com.artemoons.jiramate.client.JiraHttpClient;
 import com.artemoons.jiramate.client.impl.JiraHttpClientImpl;
 import com.artemoons.jiramate.config.BotConfiguration;
-import com.artemoons.jiramate.dto.JiraQuery;
+import com.artemoons.jiramate.dto.JiraPayload;
 import com.artemoons.jiramate.dto.JiraResponse;
 import com.artemoons.jiramate.dto.TodayDate;
 import com.artemoons.jiramate.dto.WorktimeResponse;
@@ -67,7 +67,7 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     @Override
     public void getDailyReport() {
         TodayDate today = TodayDate.getCurrentDay();
-        JiraQuery dayPayload = preparePayload(today, false);
+        JiraPayload dayPayload = preparePayload(today, false);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(dayPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(dayPayload);
@@ -83,7 +83,7 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     @Override
     public void getWeeklyReport() {
         TodayDate today = TodayDate.getCurrentDay();
-        JiraQuery weekPayload = preparePayload(today, true);
+        JiraPayload weekPayload = preparePayload(today, true);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(weekPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(weekPayload);
@@ -99,7 +99,7 @@ public class JiraQueryServiceImpl implements JiraQueryService {
     @Override
     public void getMonthlyReport() {
         TodayDate today = TodayDate.getCurrentDay();
-        JiraQuery monthPayload = preparePayload(today);
+        JiraPayload monthPayload = preparePayload(today);
 
         JiraResponse[] usersLogTime = jiraHttpClient.getWorklogs(monthPayload);
         WorktimeResponse requiredLogTime = jiraHttpClient.getRequiredTimeForPeriod(monthPayload);
@@ -115,12 +115,7 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      * @param today current date
      * @return response
      */
-    private JiraQuery preparePayload(final TodayDate today) {
-        JiraQuery jiraQuery = JiraQuery.builder()
-                .fromDate(today.getYear() + "-" + today.getMonth() + "-" + today.getStartDay())
-                .toDate(today.getYear() + "-" + today.getMonth() + "-" + today.getEndDay())
-                .worker(getUserNames())
-                .build();
+    private JiraPayload preparePayload(final TodayDate today) {
         log.info(" == MONTHLY REPORT == ");
         log.info("FROM {}-{}-{} TO {}-{}-{}",
                 today.getStartDay(),
@@ -129,7 +124,11 @@ public class JiraQueryServiceImpl implements JiraQueryService {
                 today.getEndDay(),
                 today.getMonth(),
                 today.getYear());
-        return jiraQuery;
+        return JiraPayload.builder()
+                .fromDate(today.getYear() + "-" + today.getMonth() + "-" + today.getStartDay())
+                .toDate(today.getYear() + "-" + today.getMonth() + "-" + today.getEndDay())
+                .worker(getUserNames())
+                .build();
     }
 
     /**
@@ -139,14 +138,8 @@ public class JiraQueryServiceImpl implements JiraQueryService {
      * @param fromWeekStart week start flag: true - start from Monday, false - start from current date
      * @return response
      */
-    private JiraQuery preparePayload(final TodayDate today, final boolean fromWeekStart) {
-        JiraQuery jiraQuery;
+    private JiraPayload preparePayload(final TodayDate today, final boolean fromWeekStart) {
         if (fromWeekStart) {
-            jiraQuery = JiraQuery.builder()
-                    .fromDate(today.getMondayYear() + "-" + today.getMondayMonth() + "-" + today.getMondayDay())
-                    .toDate(today.getSundayYear() + "-" + today.getSundayMonth() + "-" + today.getSundayDay())
-                    .worker(getUserNames())
-                    .build();
             log.info(" == WEEKLY REPORT == ");
             log.info("FROM {}-{}-{} TO {}-{}-{}",
                     today.getMondayDay(),
@@ -155,17 +148,21 @@ public class JiraQueryServiceImpl implements JiraQueryService {
                     today.getSundayDay(),
                     today.getSundayMonth(),
                     today.getSundayYear());
+            return JiraPayload.builder()
+                    .fromDate(today.getMondayYear() + "-" + today.getMondayMonth() + "-" + today.getMondayDay())
+                    .toDate(today.getSundayYear() + "-" + today.getSundayMonth() + "-" + today.getSundayDay())
+                    .worker(getUserNames())
+                    .build();
         } else {
             String requestString = today.getYear() + "-" + today.getMonth() + "-" + today.getDay();
-            jiraQuery = JiraQuery.builder()
+            log.info(" == DAILY REPORT == ");
+            log.info("DATE: {}-{}-{}", today.getDay(), today.getMonth(), today.getYear());
+            return JiraPayload.builder()
                     .fromDate(requestString)
                     .toDate(requestString)
                     .worker(getUserNames())
                     .build();
-            log.info(" == DAILY REPORT == ");
-            log.info("DATE: {}-{}-{}", today.getDay(), today.getMonth(), today.getYear());
         }
-        return jiraQuery;
     }
 
     /**

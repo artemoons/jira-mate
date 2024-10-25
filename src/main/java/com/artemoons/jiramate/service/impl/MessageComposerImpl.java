@@ -42,7 +42,6 @@ public class MessageComposerImpl implements MessageComposer {
     public String prepareDailyMessage(final JiraResponse[] worklogHours,
                                       final WorktimeResponse worktimeResponse,
                                       final TodayDate today) {
-
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
 
@@ -65,7 +64,6 @@ public class MessageComposerImpl implements MessageComposer {
     public String prepareWeeklyMessage(final JiraResponse[] worklogHours,
                                        final WorktimeResponse worktimeResponse,
                                        final TodayDate today) {
-
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
 
@@ -90,7 +88,6 @@ public class MessageComposerImpl implements MessageComposer {
     public String prepareMonthlyMessage(final JiraResponse[] worklogHours,
                                         final WorktimeResponse worktimeResponse,
                                         final TodayDate today) {
-
         Map<String, Double> worklogData = initWorklogMap();
         populateWorklog(worklogData, worklogHours);
 
